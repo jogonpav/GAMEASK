@@ -29,19 +29,24 @@ public class PreguntaDAO {
             Connection conn = cn.conectar();
             PreparedStatement stmt;
             ResultSet rs;
-            System.out.println("tamaño lista categoria" + listaCategoria.size());
+            System.out.println("tamaño lista categoria: " + listaCategoria.size());
+            
             for (int i = 0; i < listaCategoria.size(); i++) {
                 String query = "SELECT * FROM pregunta WHERE categoria_id =?";
                 stmt = conn.prepareStatement(query);
-                stmt.setString(1, String.valueOf(listaCategoria.get(i).getId()));     
+                stmt.setString(1, String.valueOf(listaCategoria.get(i).getId())); 
+                System.out.println("id categoria en DAO PREGUNTA: " + listaCategoria.get(i).getId());
                 //rs = stmt.executeQuery(query);
                 rs = stmt.executeQuery();
                 while (rs.next()){
-                    Pregunta cat = new Pregunta();
-                    cat.setId(rs.getInt(1));
-                    cat.setEnunciado(rs.getString(2));
-                    cat.setCategoria_id(rs.getInt(3));
-                    listaPregunta.add(cat);
+                    System.out.println("ID: " + rs.getInt(1));
+                    System.out.println("edunciado: " + rs.getString(2));
+                    System.out.println("Categoria " + rs.getInt(3));
+                    Pregunta preg = new Pregunta();
+                    preg.setId(rs.getInt(1));
+                    preg.setEnunciado(rs.getString(2));
+                    preg.setCategoria_id(rs.getInt(3));
+                    listaPregunta.add(preg);
                 }
                 
             }

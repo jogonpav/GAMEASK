@@ -27,7 +27,7 @@ public class CategoriaDAO {
             Connection conn = cn.conectar();
             String query = "SELECT * FROM categoria WHERE RONDA_ID =?";
             PreparedStatement stmt = conn.prepareStatement(query);
-            System.out.println("ronda actual:" + rondaActual);
+            System.out.println("ronda actual: DAO" + rondaActual);
             stmt.setString(1, String.valueOf(rondaActual));     
             ResultSet rs = stmt.executeQuery();
             //ResultSet rs = stmt.executeQuery(query);

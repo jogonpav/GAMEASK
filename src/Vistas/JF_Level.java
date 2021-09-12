@@ -16,12 +16,16 @@ import VO.Opcion;
 import VO.Pregunta;
 import VO.Ronda;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 /**
  *
  * @author josep
  */
 public class JF_Level extends javax.swing.JFrame {
     ArrayList<Ronda> rondaList;
+    ArrayList<Opcion> listaOpciones;
+    Historico his = new Historico();
+    Ronda ronActual = new Ronda(); //objeto para llamar método consultar datos del usuario ingresado en la base de datos
 
     /**
      * Creates new form JF_LOGGIN
@@ -30,107 +34,68 @@ public class JF_Level extends javax.swing.JFrame {
 
     public JF_Level() {
         initComponents();
-        inicializarJuego();
+        iniciarJuego();
+        
     }
     
-    public void inicializarJuego(){
-        Historico his = new Historico();
-        HistoricoControlador hisCon = new HistoricoControlador(); //objeto para llamar método consultar datos del usuario ingresado en la base de datos
+    public void iniciarJuego(){
+        HistoricoControlador hisCon;
+        hisCon = new HistoricoControlador(); //objeto para llamar método consultar datos del usuario ingresado en la base de datos
         his = hisCon.consultarCon(); //consultar datos del usuario ingresado en la base de datos mediante la clase controladora
-        System.out.println(his.getJugador());
-        Ronda ronActual = new Ronda(); //objeto para llamar método consultar datos del usuario ingresado en la base de datos
         RondaControlador ronCon = new RondaControlador(); //objeto para llamar método que permite consultar datos de nivel y premios disponibles en la base de datos         
         rondaList = ronCon.consultarCon(); //se cargan los datos de niveles y premios en un arraylist de tipo ronda.
-        boolean status = true; //permite saber cuando finalizar el juego
         ronActual.setNivel(0);
         ronActual.setPremio(0);
+        inicializarRonda();
+    }
+    public void inicializarRonda(){
+
+        boolean status = true; //permite saber cuando finalizar el juego
         jLabel1.setText(his.getJugador());
-        while (status){
-            ronActual.setNivel(ronActual.getNivel()+1);
-            ejecutarRonda(ronActual.getNivel());
-            status = false;
-            jLabel2.setText("RONDA " +String.valueOf(ronActual.getNivel())); //Establece la ronda
-            jLabel4.setText("PUNTOS " + String.valueOf(ronActual.getPremio()));
-            jTextField1.setText(String.valueOf(rondaList.get(ronActual.getNivel()-1).getPremio()));
-        }
-        System.out.println("ID:       " + "Nivel         "  +  "Premio");
-        for (int i = 0; i < rondaList.size(); i++) {
-            System.out.println(rondaList.get(i).getId() +"         " + rondaList.get(i).getNivel() + "         "+ rondaList.get(i).getPremio());
-                      
-        }
-        
+        ejecutarRonda(ronActual.getNivel()+1);
+        status = false;
+        jLabel2.setText("RONDA " +String.valueOf(ronActual.getNivel())+1); //Establece la ronda
+        jLabel4.setText("PUNTOS " + String.valueOf(ronActual.getPremio()));
+        jTextField1.setText(String.valueOf(rondaList.get(ronActual.getNivel()).getPremio()));
         
     }   
     public void ejecutarRonda (int rondaActual){
         CategoriaControlador categoriaCon = new CategoriaControlador();
         PreguntaControlador preguntaCon = new PreguntaControlador();
         OpcionControlador opcionCon = new OpcionControlador();
-        //Opcion opciones = new Opcion ();
-        ArrayList<Categoria> listaCategoria = categoriaCon.consultar(rondaActual);        
+        System.out.println("ronda Actual " + rondaActual);
+        ArrayList<Categoria> listaCategoria = categoriaCon.consultar(rondaActual);  
+        System.out.println("cantidad de categorias: " + listaCategoria.size());
+        System.out.println("Tipo de categoria: " + listaCategoria.get(0).getNombre());
+        System.out.println("get id de ronda a la que pertenece: " + listaCategoria.get(0).getRonda_id());
         ArrayList <Pregunta> listaPregunta = preguntaCon.consultar(listaCategoria);
-        int cantidadPregunta = 5; //permite contabilizar las preguntas para la ronda o nivel actual
-        //int cantidadPregunta = listaPregunta.size(); //permite contabilizar las preguntas para la ronda o nivel actual
+        int cantidadPregunta = listaPregunta.size(); //permite contabilizar las preguntas para la ronda o nivel actua
+        System.out.println("cantidad de preguntas: " + cantidadPregunta );
+        System.out.println("pregunta aleatorea"+(int) (Math.random()*cantidadPregunta));
+        int indexPreguntaLista = (int) (Math.random()*cantidadPregunta);
         
-        for (int i = 0; i < listaPregunta.size(); i++) {
-            System.out.println("ID pregunta: "+listaPregunta.get(i).getId());
-            System.out.println("pregunta " + i +": "+listaPregunta.get(i).getEnunciado());
-            
-        }
+        int preguntaID= listaPregunta.get(indexPreguntaLista).getId();
+        listaOpciones = opcionCon.consultar(preguntaID);
+        jTextArea1.setText(listaPregunta.get(indexPreguntaLista).getEnunciado());
+        jButton1.setText(listaOpciones.get(0).getRespuesta());
+        jButton2.setText(listaOpciones.get(1).getRespuesta());
+        jButton3.setText(listaOpciones.get(2).getRespuesta());
+        jButton4.setText(listaOpciones.get(3).getRespuesta());
         
-        for (int i = 0; i < 10; i++) {
-            System.out.println("RANDON PREGUNTA "+(int) (Math.random()*(cantidadPregunta)));
-            
-        }
-        
-        System.out.println("numero preguntas: " + listaPregunta.size());
-        int numeroPreguntaLista = (int) (Math.random()*(cantidadPregunta));
-        int preguntaID= listaPregunta.get(numeroPreguntaLista).getId();
-        
-        ArrayList<Opcion> listaOpciones = opcionCon.consultar(preguntaID);
-        
-        System.out.println("Pregunta: ");
-        System.out.println(listaPregunta.get(numeroPreguntaLista).getEnunciado());
-        for (int i = 0; i < listaOpciones.size(); i++) {
-            System.out.println("ID OPCION: " + listaOpciones.get(i).getId());
-            System.out.println("RESPUESTA: " + listaOpciones.get(i).getRespuesta());
-            System.out.println("CORRECTA: " + listaOpciones.get(i).isEs_correcto());
-            System.out.println("PREGUNTA ID: " + listaOpciones.get(i).getPregunta_id());
-                        
-        }
-         jTextArea1.setText(listaPregunta.get(numeroPreguntaLista).getEnunciado());
-         jButton1.setText(listaOpciones.get(0).getRespuesta());
-         jButton2.setText(listaOpciones.get(1).getRespuesta());
-         jButton3.setText(listaOpciones.get(2).getRespuesta());
-         jButton4.setText(listaOpciones.get(3).getRespuesta());         
-         
-         
-         
-         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-       for (int i = 0; i < rondaList.size(); i++) {
-            System.out.println("Ronda # " +rondaList.get(i).getNivel());
-            System.out.println("Ronda # " +rondaList.get(i).getPremio());
-            
-        }
-        
-    
-    
-        
-    
     }
         
-    public void cargarCategorias(){
-    
+    public void cargarAvance(){
+        JOptionPane.showMessageDialog(null, "Has ganado, pasa a la siguiente ronda","mensaje", JOptionPane.INFORMATION_MESSAGE);
+        //System.out.println(ronActual.getNivel()+1);
+        ronActual.setPremio(ronActual.getPremio()+ rondaList.get(ronActual.getNivel()).getPremio());
+        
+        ronActual.setNivel(ronActual.getNivel()+1);
+        System.out.println("Nivel alcanzado: " + ronActual.getNivel());
+        System.out.println("PREMIO GANADO EN LA RONDA: " +ronActual.getPremio());
+        System.out.println("PREMIO A CONCURSAR: " + rondaList.get(ronActual.getNivel()).getPremio());
+        inicializarRonda();
+        
+        
     
     }
     
@@ -258,18 +223,6 @@ public class JF_Level extends javax.swing.JFrame {
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(48, 48, 48))
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(246, 246, 246)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1008, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -286,6 +239,19 @@ public class JF_Level extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(16, 16, 16))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1008, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(246, 246, 246)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,7 +263,7 @@ public class JF_Level extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -305,13 +271,13 @@ public class JF_Level extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
                 .addComponent(jButton1)
-                .addGap(35, 35, 35)
-                .addComponent(jButton4)
-                .addGap(30, 30, 30)
+                .addGap(27, 27, 27)
                 .addComponent(jButton2)
-                .addGap(18, 18, 18)
+                .addGap(26, 26, 26)
                 .addComponent(jButton3)
-                .addGap(33, 33, 33)
+                .addGap(31, 31, 31)
+                .addComponent(jButton4)
+                .addGap(32, 32, 32)
                 .addComponent(jButton5)
                 .addGap(49, 49, 49))
         );
@@ -321,18 +287,36 @@ public class JF_Level extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        
+        if (listaOpciones.get(0).isEs_correcto()){
+            cargarAvance();            
+        }
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        if (listaOpciones.get(1).isEs_correcto()){
+            cargarAvance();    
+        
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        
+        if (listaOpciones.get(2).isEs_correcto()){
+            cargarAvance(); 
+            
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        if (listaOpciones.get(3).isEs_correcto()){
+            cargarAvance(); 
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
