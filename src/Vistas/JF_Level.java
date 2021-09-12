@@ -7,9 +7,13 @@ package Vistas;
 
 import Controlador.CategoriaControlador;
 import Controlador.HistoricoControlador;
+import Controlador.OpcionControlador;
+import Controlador.PreguntaControlador;
 import Controlador.RondaControlador;
 import VO.Categoria;
 import VO.Historico;
+import VO.Opcion;
+import VO.Pregunta;
 import VO.Ronda;
 import java.util.ArrayList;
 /**
@@ -39,15 +43,78 @@ public class JF_Level extends javax.swing.JFrame {
         rondaList = ronCon.consultarCon(); //se cargan los datos de niveles y premios en un arraylist de tipo ronda.
         boolean status = true; //permite saber cuando finalizar el juego
         ronActual.setNivel(0);
+        ronActual.setPremio(0);
+        jLabel1.setText(his.getJugador());
         while (status){
             ronActual.setNivel(ronActual.getNivel()+1);
             ejecutarRonda(ronActual.getNivel());
-      
+            status = false;
+            jLabel2.setText("RONDA " +String.valueOf(ronActual.getNivel())); //Establece la ronda
+            jLabel4.setText("PUNTOS " + String.valueOf(ronActual.getPremio()));
+            jTextField1.setText(String.valueOf(rondaList.get(ronActual.getNivel()-1).getPremio()));
         }
+        System.out.println("ID:       " + "Nivel         "  +  "Premio");
+        for (int i = 0; i < rondaList.size(); i++) {
+            System.out.println(rondaList.get(i).getId() +"         " + rondaList.get(i).getNivel() + "         "+ rondaList.get(i).getPremio());
+                      
+        }
+        
+        
     }   
     public void ejecutarRonda (int rondaActual){
-        CategoriaControlador catCon = new CategoriaControlador();
-        ArrayList<Categoria> categoriaList = catCon.consultar(rondaActual);
+        CategoriaControlador categoriaCon = new CategoriaControlador();
+        PreguntaControlador preguntaCon = new PreguntaControlador();
+        OpcionControlador opcionCon = new OpcionControlador();
+        //Opcion opciones = new Opcion ();
+        ArrayList<Categoria> listaCategoria = categoriaCon.consultar(rondaActual);        
+        ArrayList <Pregunta> listaPregunta = preguntaCon.consultar(listaCategoria);
+        int cantidadPregunta = 5; //permite contabilizar las preguntas para la ronda o nivel actual
+        //int cantidadPregunta = listaPregunta.size(); //permite contabilizar las preguntas para la ronda o nivel actual
+        
+        for (int i = 0; i < listaPregunta.size(); i++) {
+            System.out.println("ID pregunta: "+listaPregunta.get(i).getId());
+            System.out.println("pregunta " + i +": "+listaPregunta.get(i).getEnunciado());
+            
+        }
+        
+        for (int i = 0; i < 10; i++) {
+            System.out.println("RANDON PREGUNTA "+(int) (Math.random()*(cantidadPregunta)));
+            
+        }
+        
+        System.out.println("numero preguntas: " + listaPregunta.size());
+        int numeroPreguntaLista = (int) (Math.random()*(cantidadPregunta));
+        int preguntaID= listaPregunta.get(numeroPreguntaLista).getId();
+        
+        ArrayList<Opcion> listaOpciones = opcionCon.consultar(preguntaID);
+        
+        System.out.println("Pregunta: ");
+        System.out.println(listaPregunta.get(numeroPreguntaLista).getEnunciado());
+        for (int i = 0; i < listaOpciones.size(); i++) {
+            System.out.println("ID OPCION: " + listaOpciones.get(i).getId());
+            System.out.println("RESPUESTA: " + listaOpciones.get(i).getRespuesta());
+            System.out.println("CORRECTA: " + listaOpciones.get(i).isEs_correcto());
+            System.out.println("PREGUNTA ID: " + listaOpciones.get(i).getPregunta_id());
+                        
+        }
+         jTextArea1.setText(listaPregunta.get(numeroPreguntaLista).getEnunciado());
+         jButton1.setText(listaOpciones.get(0).getRespuesta());
+         jButton2.setText(listaOpciones.get(1).getRespuesta());
+         jButton3.setText(listaOpciones.get(2).getRespuesta());
+         jButton4.setText(listaOpciones.get(3).getRespuesta());         
+         
+         
+         
+         
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
        for (int i = 0; i < rondaList.size(); i++) {
@@ -63,9 +130,6 @@ public class JF_Level extends javax.swing.JFrame {
     }
         
     public void cargarCategorias(){
-        
-       
-        
     
     
     }

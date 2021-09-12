@@ -57,6 +57,7 @@ public class HistoricoDAO {
             }
             conn.close();
             }catch(SQLException e){
+                System.out.println("dao historico");
                 System.out.println(e);}
     return his;
     }

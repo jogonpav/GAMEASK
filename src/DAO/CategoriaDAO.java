@@ -27,9 +27,10 @@ public class CategoriaDAO {
             Connection conn = cn.conectar();
             String query = "SELECT * FROM categoria WHERE RONDA_ID =?";
             PreparedStatement stmt = conn.prepareStatement(query);
+            System.out.println("ronda actual:" + rondaActual);
             stmt.setString(1, String.valueOf(rondaActual));     
-            stmt.executeUpdate();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery();
+            //ResultSet rs = stmt.executeQuery(query);
             while (rs.next()){
                 Categoria cat = new Categoria();
                 cat.setId(rs.getInt(1));
@@ -39,6 +40,7 @@ public class CategoriaDAO {
             }
             conn.close();
             }catch(SQLException e){
+                System.out.println("dao categoria");
                 System.out.println(e);}
         return categoriaList;
     }

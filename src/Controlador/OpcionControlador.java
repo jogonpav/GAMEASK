@@ -5,19 +5,25 @@
  */
 package Controlador;
 
-import VO.Categoria;
-import VO.Opcion1;
+import DAO.OpcionDAO;
+import VO.Opcion;
 import java.util.ArrayList;
 
 /**
  *
  * @author josep
  */
-public class OpcionesControlador {
+public class OpcionControlador {
     
-    public static Opcion1 consultar(ArrayList <Categoria> listaCategoria){
+    public static ArrayList<Opcion> consultar(int preguntaID){
+        
+        OpcionDAO opcDAO = new OpcionDAO();
     
-    return 
+        
+           
+    
+        return opcDAO.consultar(preguntaID);
     }
     
+
 }

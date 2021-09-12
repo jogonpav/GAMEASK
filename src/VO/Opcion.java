@@ -9,7 +9,7 @@ package VO;
  *
  * @author josep
  */
-public class Opcion1 {
+public class Opcion {
     int id;
     String respuesta;
     boolean es_correcto;
@@ -34,6 +34,8 @@ public class Opcion1 {
     public boolean isEs_correcto() {
         return es_correcto;
     }
+
+
 
     public void setEs_correcto(boolean es_correcto) {
         this.es_correcto = es_correcto;
