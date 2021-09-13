@@ -18,10 +18,6 @@ public class RondaControlador {
     
       public static ArrayList<Ronda> consultarCon (){
         RondaDAO ronDAO = new RondaDAO();
-        //ArrayList<Ronda> rondaList = new ArrayList<>();
-        
-        //rondaList = ronDAO.consultarDAO();
-    
     
         return ronDAO.consultarDAO();
     }

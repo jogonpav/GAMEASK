@@ -40,7 +40,6 @@ public class CategoriaDAO {
             }
             conn.close();
             }catch(SQLException e){
-                System.out.println("dao categoria");
                 System.out.println(e);}
         return categoriaList;
     }

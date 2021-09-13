@@ -24,7 +24,7 @@ public class HistoricoControlador {
                 break;
             }
         }
-            System.out.println(respuesta);
+
         return respuesta;
     }
         

@@ -40,7 +40,6 @@ public class OpcionDAO {
             }
             conn.close();
             }catch(SQLException e){
-                System.out.println("consulta opciones");
                 System.out.println(e);}
         return listaOpciones;
     }

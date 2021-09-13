@@ -71,24 +71,17 @@ public class JF_Level extends javax.swing.JFrame {
         CategoriaControlador categoriaCon = new CategoriaControlador();
         PreguntaControlador preguntaCon = new PreguntaControlador();
         OpcionControlador opcionCon = new OpcionControlador();
-        System.out.println("ronda Actual " + rondaActual);
+
         ArrayList<Categoria> listaCategoria = categoriaCon.consultar(rondaActual);  
-        System.out.println("cantidad de categorias: " + listaCategoria.size());
-        System.out.println("Tipo de categoria: " + listaCategoria.get(0).getNombre());
-        System.out.println("get id de ronda a la que pertenece: " + listaCategoria.get(0).getRonda_id());
+
         ArrayList <Pregunta> listaPregunta = preguntaCon.consultar(listaCategoria);
         int cantidadPregunta = listaPregunta.size(); //permite contabilizar las preguntas para la ronda o nivel actua
-        System.out.println("cantidad de preguntas: " + cantidadPregunta );
-        System.out.println("pregunta aleatorea"+(int) (Math.random()*cantidadPregunta));
-        for (int i = 0; i < 10; i++) {
-            System.out.println("pregunta aleatorea"+(int) (Math.random()*cantidadPregunta));
-        }
+
+
         int indexPreguntaLista = (int) (Math.random()*cantidadPregunta);
         
         int preguntaID= listaPregunta.get(indexPreguntaLista).getId();
-        for (int i = 0; i < listaPregunta.size(); i++) {
-            System.out.println(listaPregunta.get(indexPreguntaLista).getEnunciado());
-        }
+
         
         listaOpciones = opcionCon.consultar(preguntaID);
         jTextArea1.setText(listaPregunta.get(indexPreguntaLista).getEnunciado());

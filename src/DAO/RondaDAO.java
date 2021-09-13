@@ -38,7 +38,6 @@ public class RondaDAO {
             }
             conn.close();
             }catch(SQLException e){
-                 System.out.println("dao ronda");
                 System.out.println(e);}    
     
         return rondaList;
