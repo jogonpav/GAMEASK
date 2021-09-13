@@ -3,13 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/VO/Pregunta.java</file>
+            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/DAO/CategoriaDAO.java</file>
             <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/Vistas/JF_STARGAME.java</file>
-            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/Controlador/HistoricoControlador.java</file>
-            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/gameask/GAMEASK.java</file>
+            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/Controlador/CategoriaControlador.java</file>
+            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/Controlador/PreguntaControlador.java</file>
+            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/DAO/PreguntaDAO.java</file>
             <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/VO/Ronda.java</file>
             <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/DAO/HistoricoDAO.java</file>
-            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/VO/Historico.java</file>
             <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/Vistas/JF_Level.java</file>
+            <file>file:/E:/Users/josep/Documents/NetBeansProjects/GAMEASK/src/Controlador/RondaControlador.java</file>
         </group>
     </open-files>
 </project-private>

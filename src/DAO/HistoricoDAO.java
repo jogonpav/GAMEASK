@@ -62,4 +62,23 @@ public class HistoricoDAO {
     return his;
     }
     
+    public void insertarHistorico(Historico his){
+        try {
+            conexion cn = new conexion();
+            Connection conn = cn.conectar();
+            //Statement stmt = conn.createStatement();          
+//            String query = "INSERT INTO usuarios (jugador) VALUES('"+ est.getUser() +"','"+ est.getContrasena()+"','"+ est.getTipo() + "')";
+            String query = "UPDATE HISTORICO SET RONDA_ALCANZADA = ?, PREMIO_OBTENIDO= ?, CLASIFICACION=? WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, String.valueOf(his.getRonda_alcanzada())); 
+            stmt.setString(2, String.valueOf(his.getPremio()));   
+            stmt.setString(3, String.valueOf(his.getClasificacion())); 
+            stmt.setString(4, String.valueOf(his.getId())); 
+            stmt.executeUpdate(); 
+            conn.close();
+            }catch(SQLException e){
+                System.out.println(e);}
+    }
+    
+    
 }

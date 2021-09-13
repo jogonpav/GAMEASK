@@ -43,6 +43,11 @@ public class HistoricoControlador {
     
     }
     
+    public void insertarHistorico (Historico His){        
+        HistoricoDAO hisDAO =  new HistoricoDAO();  
+        hisDAO.insertarHistorico(His);
+    }
+    
     
         
     

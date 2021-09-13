@@ -48,7 +48,9 @@ public class JF_STARGAME extends javax.swing.JFrame {
             Historico his;            
             his = guardarJugador();
             JF_Level Level = new JF_Level();
-            Level.setVisible(true);    
+            Level.setVisible(true);
+            dispose();
+            
         }
     }
     /**

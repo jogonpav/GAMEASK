@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
  * @author josep
  */
 public class JF_Level extends javax.swing.JFrame {
+    int ronda_maxima = 5; //Establecer la ronda máxima del juego (por ahora solo 5 rondas)
     ArrayList<Ronda> rondaList;
     ArrayList<Opcion> listaOpciones;
     Historico his = new Historico();
@@ -54,8 +55,8 @@ public class JF_Level extends javax.swing.JFrame {
         jLabel1.setText(his.getJugador());
         ejecutarRonda(ronActual.getNivel()+1);
         status = false;
-        jLabel2.setText("RONDA " +String.valueOf(ronActual.getNivel())+1); //Establece la ronda
-        jLabel4.setText("PUNTOS " + String.valueOf(ronActual.getPremio()));
+        jLabel2.setText("RONDA ACTUAL " +String.valueOf(ronActual.getNivel()+1)); //Establece la ronda
+        jLabel4.setText("PUNTOS GANADOS " + String.valueOf(ronActual.getPremio()));
         jTextField1.setText(String.valueOf(rondaList.get(ronActual.getNivel()).getPremio()));
         
     }   
@@ -81,22 +82,46 @@ public class JF_Level extends javax.swing.JFrame {
         jButton2.setText(listaOpciones.get(1).getRespuesta());
         jButton3.setText(listaOpciones.get(2).getRespuesta());
         jButton4.setText(listaOpciones.get(3).getRespuesta());
-        
     }
         
     public void cargarAvance(){
-        JOptionPane.showMessageDialog(null, "Has ganado, pasa a la siguiente ronda","mensaje", JOptionPane.INFORMATION_MESSAGE);
-        //System.out.println(ronActual.getNivel()+1);
         ronActual.setPremio(ronActual.getPremio()+ rondaList.get(ronActual.getNivel()).getPremio());
-        
-        ronActual.setNivel(ronActual.getNivel()+1);
-        System.out.println("Nivel alcanzado: " + ronActual.getNivel());
-        System.out.println("PREMIO GANADO EN LA RONDA: " +ronActual.getPremio());
-        System.out.println("PREMIO A CONCURSAR: " + rondaList.get(ronActual.getNivel()).getPremio());
-        inicializarRonda();
-        
-        
+        his.setPremio(ronActual.getPremio());
+        his.setRonda_alcanzada(ronActual.getNivel()+1);
+        if ((his.getRonda_alcanzada())<ronda_maxima){
+            ronActual.setNivel(his.getRonda_alcanzada());
+            JOptionPane.showMessageDialog(null, "Has ganado la ronda, pasas a la siguiente","mensaje", JOptionPane.INFORMATION_MESSAGE);
+            inicializarRonda();
+        }else{            
+            his.setClasificacion("PREMIO MAYOR");
+            finalizarJuego();
+        }
+    }
     
+    public void finalizarJuego(){
+        switch (his.getClasificacion()){
+            case "PREMIO MAYOR":
+                JOptionPane.showMessageDialog(null, "HAS GANADO EL JUEGO","mensaje", JOptionPane.INFORMATION_MESSAGE);
+                guardarHistorico();
+                dispose();
+                break;
+            case "ABANDONA JUEGO":
+                JOptionPane.showMessageDialog(null, "Te has Retirado del Juego","mensaje", JOptionPane.INFORMATION_MESSAGE);
+                guardarHistorico();
+                dispose();
+                break;
+            case "PERDIO EL JUEGO":
+                his.setPremio(0);               
+                JOptionPane.showMessageDialog(null, "PERDIO el juego","mensaje", JOptionPane.INFORMATION_MESSAGE);
+                guardarHistorico();
+                dispose();
+                break;
+        }
+    }
+        
+    public void guardarHistorico(){
+        HistoricoControlador hisCon = new HistoricoControlador();
+        hisCon.insertarHistorico(his);
     }
     
 
@@ -133,7 +158,7 @@ public class JF_Level extends javax.swing.JFrame {
         jLabel1.setOpaque(true);
 
         jLabel2.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 153, 153));
         jLabel2.setText("Ronda 1");
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -144,7 +169,7 @@ public class JF_Level extends javax.swing.JFrame {
         jSeparator1.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
 
         jLabel4.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 153, 153));
         jLabel4.setText("Puntos ");
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -232,13 +257,13 @@ public class JF_Level extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 522, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,19 +276,20 @@ public class JF_Level extends javax.swing.JFrame {
                                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -290,6 +316,10 @@ public class JF_Level extends javax.swing.JFrame {
         
         if (listaOpciones.get(0).isEs_correcto()){
             cargarAvance();            
+        }else{
+            his.setClasificacion("PERDIO EL JUEGO");
+            finalizarJuego();
+            
         }
         
         
@@ -298,8 +328,10 @@ public class JF_Level extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         if (listaOpciones.get(1).isEs_correcto()){
-            cargarAvance();    
-        
+            cargarAvance();   
+        }else{
+            his.setClasificacion("PERDIO EL JUEGO");
+            finalizarJuego();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -308,7 +340,9 @@ public class JF_Level extends javax.swing.JFrame {
         
         if (listaOpciones.get(2).isEs_correcto()){
             cargarAvance(); 
-            
+        }else{
+            his.setClasificacion("PERDIO EL JUEGO");
+            finalizarJuego();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -316,11 +350,16 @@ public class JF_Level extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (listaOpciones.get(3).isEs_correcto()){
             cargarAvance(); 
+        }else{
+            his.setClasificacion("PERDIO EL JUEGO");
+            finalizarJuego();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        his.setClasificacion("ABANDONA JUEGO");
+        finalizarJuego();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
