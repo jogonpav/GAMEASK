@@ -5,6 +5,8 @@
  */
 package gameask;
 
+import Vistas.JF_STARGAME;
+
 /**
  *
  * @author josep
@@ -16,6 +18,12 @@ public class GAMEASK {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        JF_STARGAME JF = new JF_STARGAME();
+        JF.setLocationRelativeTo(null);
+        JF.setResizable(false);
+        JF.setVisible(true);
+        
+        
     }
     
 }

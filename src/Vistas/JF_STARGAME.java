@@ -8,6 +8,10 @@ package Vistas;
 import static Controlador.HistoricoControlador.insertControlador;
 import static Controlador.HistoricoControlador.validarCaracteresAlfa;
 import VO.Historico;
+import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
  *
@@ -19,12 +23,15 @@ public class JF_STARGAME extends javax.swing.JFrame {
     /**
      * Creates new form STARGAME
      */
+    BackgroundPanel background = new BackgroundPanel();
     public JF_STARGAME() {
-        initComponents();        
+        this.setContentPane(background);
+        initComponents(); 
+        
     }
 
     
-    public Historico guardarJugador(){
+    public void guardarJugador(){ //guardar registro del jugador y retornar ID de registro en la DB
         Historico his = new Historico();    
         id = his.getId();
         his.setJugador(jTextField1.getText());
@@ -34,23 +41,24 @@ public class JF_STARGAME extends javax.swing.JFrame {
         if (validarCaracteresAlfa(his)){            
             his= insertControlador(his);
             System.out.println(his.getId());
+            JF_Level Level = new JF_Level();
+            Level.setLocationRelativeTo(null);
+            Level.setResizable(false);
+            Level.setVisible(true);
+            dispose();
             
         }else{
-            jTextField1.setText("");            
+            jLabel2.setText("Caracteres inválidos, solo letras"); 
+            jTextField1.setText("");
         }
-        return his;
+        
     }
     
     public void validar(){
         if (jTextField1.getText().isEmpty()){
             jLabel2.setText("Nombre Requerido");
         }else{
-            Historico his;            
-            his = guardarJugador();
-            JF_Level Level = new JF_Level();
-            Level.setVisible(true);
-            dispose();
-            
+            guardarJugador();
         }
     }
     /**
@@ -69,6 +77,7 @@ public class JF_STARGAME extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jButton1.setBackground(new java.awt.Color(0, 204, 255));
         jButton1.setText("INICIAR JUEGO");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,41 +92,44 @@ public class JF_STARGAME extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setText("NOMBRE");
+
+        jLabel2.setBackground(new java.awt.Color(0, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 51));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(361, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(360, 360, 360))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(303, 303, 303)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                            .addComponent(jTextField1))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(423, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(422, 422, 422))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(470, 470, 470))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(213, Short.MAX_VALUE)
+                .addContainerGap(436, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(135, 135, 135))
+                .addGap(168, 168, 168))
         );
 
         pack();
@@ -166,6 +178,20 @@ public class JF_STARGAME extends javax.swing.JFrame {
                 new JF_STARGAME().setVisible(true);
             }
         });
+    }
+    
+    class BackgroundPanel extends JPanel{ //inner class
+        
+        private Image imagen;
+        
+        @Override
+        public void paint (Graphics g){
+        
+            imagen = new ImageIcon(getClass().getResource("/Imagenes/main-background.png")).getImage();
+            g.drawImage(imagen,0,0, getWidth(), getHeight(), this);
+            setOpaque(false); 
+            super.paint(g);
+        }   
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

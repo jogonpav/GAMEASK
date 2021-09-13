@@ -15,8 +15,13 @@ import VO.Historico;
 import VO.Opcion;
 import VO.Pregunta;
 import VO.Ronda;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author josep
@@ -32,10 +37,12 @@ public class JF_Level extends javax.swing.JFrame {
      * Creates new form JF_LOGGIN
   
      */
-
+    BackgroundPanel background = new BackgroundPanel();
     public JF_Level() {
+        this.setContentPane(background);
         initComponents();
         iniciarJuego();
+        
         
     }
     
@@ -73,9 +80,16 @@ public class JF_Level extends javax.swing.JFrame {
         int cantidadPregunta = listaPregunta.size(); //permite contabilizar las preguntas para la ronda o nivel actua
         System.out.println("cantidad de preguntas: " + cantidadPregunta );
         System.out.println("pregunta aleatorea"+(int) (Math.random()*cantidadPregunta));
+        for (int i = 0; i < 10; i++) {
+            System.out.println("pregunta aleatorea"+(int) (Math.random()*cantidadPregunta));
+        }
         int indexPreguntaLista = (int) (Math.random()*cantidadPregunta);
         
         int preguntaID= listaPregunta.get(indexPreguntaLista).getId();
+        for (int i = 0; i < listaPregunta.size(); i++) {
+            System.out.println(listaPregunta.get(indexPreguntaLista).getEnunciado());
+        }
+        
         listaOpciones = opcionCon.consultar(preguntaID);
         jTextArea1.setText(listaPregunta.get(indexPreguntaLista).getEnunciado());
         jButton1.setText(listaOpciones.get(0).getRespuesta());
@@ -103,17 +117,29 @@ public class JF_Level extends javax.swing.JFrame {
             case "PREMIO MAYOR":
                 JOptionPane.showMessageDialog(null, "HAS GANADO EL JUEGO","mensaje", JOptionPane.INFORMATION_MESSAGE);
                 guardarHistorico();
+                JF_Ganador jfGanador = new JF_Ganador();
+                jfGanador.setLocationRelativeTo(null);
+                jfGanador.setResizable(false);
+                jfGanador.setVisible(true);
                 dispose();
                 break;
             case "ABANDONA JUEGO":
                 JOptionPane.showMessageDialog(null, "Te has Retirado del Juego","mensaje", JOptionPane.INFORMATION_MESSAGE);
                 guardarHistorico();
+                JF_Retirado jfr = new JF_Retirado();
+                jfr.setLocationRelativeTo(null);
+                jfr.setResizable(false);
+                jfr.setVisible(true);
                 dispose();
                 break;
             case "PERDIO EL JUEGO":
                 his.setPremio(0);               
                 JOptionPane.showMessageDialog(null, "PERDIO el juego","mensaje", JOptionPane.INFORMATION_MESSAGE);
                 guardarHistorico();
+                GameOver go= new GameOver();
+                go.setLocationRelativeTo(null);
+                go.setResizable(false);
+                go.setVisible(true);
                 dispose();
                 break;
         }
@@ -176,10 +202,14 @@ public class JF_Level extends javax.swing.JFrame {
         jLabel4.setOpaque(true);
 
         jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(153, 255, 255));
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jTextArea1.setForeground(new java.awt.Color(51, 51, 51));
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setText("Cual es la ciudad más grande de colombia");
+        jTextArea1.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton1.setBackground(new java.awt.Color(0, 204, 255));
@@ -228,6 +258,7 @@ public class JF_Level extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 0));
         jLabel3.setText("Puntos  a ganar en la ronda actual");
 
         jTextField1.setEditable(false);
@@ -244,44 +275,45 @@ public class JF_Level extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(130, 130, 130)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(89, 89, 89))
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(213, 213, 213)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1008, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(246, 246, 246)
+                        .addGap(228, 228, 228)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(28, Short.MAX_VALUE))
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(168, 168, 168)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 392, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(440, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(9, 9, 9)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -289,7 +321,9 @@ public class JF_Level extends javax.swing.JFrame {
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -303,9 +337,7 @@ public class JF_Level extends javax.swing.JFrame {
                 .addComponent(jButton3)
                 .addGap(31, 31, 31)
                 .addComponent(jButton4)
-                .addGap(32, 32, 32)
-                .addComponent(jButton5)
-                .addGap(49, 49, 49))
+                .addGap(106, 106, 106))
         );
 
         pack();
@@ -400,6 +432,19 @@ public class JF_Level extends javax.swing.JFrame {
                 new JF_Level().setVisible(true);
             }
         });
+    }
+    class BackgroundPanel extends JPanel{ //inner class
+        
+        private Image imagen;
+        
+        @Override
+        public void paint (Graphics g){
+        
+            imagen = new ImageIcon(getClass().getResource("/Imagenes/2352.jpg")).getImage();
+            g.drawImage(imagen,0,0, getWidth(), getHeight(), this);
+            setOpaque(false); 
+            super.paint(g);
+        }   
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
